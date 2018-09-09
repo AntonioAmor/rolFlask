@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <title>Rol Server</title>
+    </head>
+    <body>
+        <a href=/logout >Logout</a>
+        <div>
+        {% for user in users%}
+        <a href={{'/get_user/'+user}} >{{user}}</a>
+        {% endfor %}
+        </div>
+        <div>
+            <table>
+                {%for stat in dicc %}
+                <tr><td>{{stat}}</td><td>{{dicc[stat]}}</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+</html>
