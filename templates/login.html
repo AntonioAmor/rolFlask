@@ -1,17 +1,44 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-          "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css') }}">
+</head>
+<body>
+  <script type="text/javascript">
+    var images = ['static/img/bg1.jpg', 'static/img/bg2.jpg', 'static/img/bg3.jpg', 'static/img/bg4.jpg'];
+    document.getElementsByTagName('body')[0].style.backgroundImage = 'url(' + images[Math.floor(Math.random() * images.length)] + ')';
+  </script>
+    <div class="contenedor-form">
+        <div class="toggle">
+            <span class='logButt'>Crear Cuenta</span>
+        </div>
 
-<html>
-    <head>
-        <title>Login Page</title>
-    </head>
-    <body>
-        <form action='{{ url_for('login') }}' method='post' >
-            <label>User</label>
-            <input type='text' name='user' value='gonzalinator'>
-            <label>Password</label>
-            <input type='password' name='pass'>
-            <input type='submit' name='submit' value='Log in'>
-        </form>
-    </body>
+        <div class="formulario">
+            <h2>Iniciar Sesión</h2>
+            <form action="{{ url_for('login') }}", method='post'>
+                <input type="text" placeholder="Usuario" name='user' required>
+                <input type="password" placeholder="Contraseña" name='pass' required>
+                <input type="submit" value="Iniciar Sesión" name='submit'>
+            </form>
+        </div>
+
+        <div class="formulario">
+            <h2>Crea tu Cuenta</h2>
+            <form action="{{ url_for('register') }}", method='post'>
+                <input type="text" placeholder="Usuario" name='user' required>
+
+                <input type="password" placeholder="Contraseña" name='pass' required>
+
+                <input type="submit" value="Registrarse">
+            </form>
+        </div>
+        <!--<div class="reset-password">
+            <a href="#">Olvide mi Contraseña?</a>
+        </div> -->
+    </div>
+    <script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/login.js') }}"></script>
+</body>
 </html>

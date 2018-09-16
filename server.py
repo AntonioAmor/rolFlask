@@ -61,6 +61,19 @@ def logout():
         session.pop('shownUser')
     return redirect('/')
 
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['user']
+        pwd = request.form['pass']
+        #we check the new user is not already registered
+        if username not in [uf.split('.')[0] for uf in [f for f in os.listdir('users/') if os.path.isfile(os.path.join('users/', f))]]:
+            with open("users/"+username + ".data", 'w') as userFile:
+                userFile.write(pwd)
+            return redirect('/')
+        else: #TODO: mensaje de error
+            return redirect('/')
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
