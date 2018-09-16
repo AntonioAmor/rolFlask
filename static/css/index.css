@@ -1,0 +1,46 @@
+body {
+    background: url(../img/bg4.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: Roboto;
+}
+
+font.statText {
+  color:white;
+
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li:hover {
+    background-color: #111;
+}
+
+a.navLink,
+a.pjLink {
+    text-decoration: none;
+}
+ a:link.navLink,
+ a:visited.navLink {
+    color: white;
+}
+ a:hover.navLink {
+    color: white;
+}

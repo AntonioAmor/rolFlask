@@ -70,10 +70,13 @@ def register():
         if username not in [uf.split('.')[0] for uf in [f for f in os.listdir('users/') if os.path.isfile(os.path.join('users/', f))]]:
             with open("users/"+username + ".data", 'w') as userFile:
                 userFile.write(pwd)
+                session['username'] = "users/"+ request.form['user'] + ".data"
+                session['shownUser']  = session['username']
             return redirect('/')
         else: #TODO: mensaje de error
             return redirect('/')
 
 
 if __name__ == "__main__":
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run(host="0.0.0.0", port=8080)
