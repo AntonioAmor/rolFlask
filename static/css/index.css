@@ -1,14 +1,12 @@
 body {
-    background: url(../img/bg4.jpg);
+    /*background: url(../img/bg4.jpg);*/
+    background-color: #111
     background-size: cover;
     background-attachment: fixed;
     font-family: Roboto;
 }
 
-font.statText {
-  color:white;
 
-}
 ul {
     list-style-type: none;
     margin: 0;
@@ -42,5 +40,33 @@ a.pjLink {
     color: white;
 }
  a:hover.navLink {
+    color: white;
+}
+
+font.statText {
+  color:black ;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+table.playerData{
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.playerData td, table.playerData th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table.playerData tr:nth-child(even){background-color: #f2f2f2;}
+
+table.playerData tr:hover {background-color: #ddd;}
+
+table.playerData th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #f00;
     color: white;
 }

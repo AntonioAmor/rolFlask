@@ -16,15 +16,19 @@
       </ul>
       <div>
         {% for user in users%}
-        <a class='pjLink' href={{'/get_user/'+user}} >{{user}}</a>
+          <a class='pjLink' href={{'/get_user/'+user}} >{{user}}</a>
         {% endfor %}
       </div>
       <div>
-        <table>
+        <table class=playerData>
+            <tr>
+              <th><text class='statText'>Stat</text></th>
+              <th><text class='statText'>Valor</text></th>
+            </tr>
             {%for stat in dicc %}
-              <tr><td><font class='statText'>{{stat}}</font></td><td><font class='statText'>{{dicc[stat]}}</font></td></tr>
+              <tr><td><text class='statText'>{{stat}}</text></td><td><text class='statText'>{{dicc[stat]}}</text></td></tr>
             {% endfor %}
         </table>
-        </div>
+      </div>
     </body>
 </html>
