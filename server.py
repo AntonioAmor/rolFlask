@@ -14,27 +14,32 @@ db = 'example.db'
 
 #TODO: sacar queries a otro fichero
 find_users = "SELECT * FROM users WHERE user_name = ?"
+get_id = "SELECT user_id FROM users WHERE user_name = ?"
 register_users = "INSERT INTO users (user_name, user_pswd) VALUES (?,?)"
+get_games = "SELECT * FROM game"
+get_user_games = "SELECT game from game_user WHERE myuser = ?"
 
 @app.route('/')
 def inServer():
     if 'username' not in session:
         return redirect(url_for("login"))
-
-    usersFiles = [f for f in os.listdir('users/') if os.path.isfile(os.path.join('users/', f))]
-    players= [uf.split('.')[0] for uf in usersFiles]
-
-    dicc = {}
-    with open(session['shownUser'], 'r') as userFile:
-        data = userFile.readlines()[1:]
-        for stat in data:
-            values = stat.strip("\n").split(",")
-            if values[0][0] == '_' and session['shownUser'] == session['username']:
-                dicc[values[0][1:]] = values[1]
-            elif values[0][0] != '_':
-                dicc[values[0]] = values[1]
-
-    return render_template("index.html", dicc=dicc, users=players)
+    dict = { "myGames" : [], "allGames" : [], "game_desc": []}
+    myGames = []
+    with sqlite3.connect(db) as conn:
+        id = conn.cursor().execute(get_id, (session['username'],)).fetchone()[0]
+        #We get the games the user is in
+        for line in conn.cursor().execute(get_user_games, (id,)):
+            myGames.append(line[0])
+        #We get all games
+        for line in conn.cursor().execute(get_games):
+            #if its one of ours we flag it
+            if line[0] in myGames: #FIXME: Possible error, we depend on the db schema not changing
+                dict['myGames'].append(line[1])
+            #if its not we add it to the other list
+            #IDEA: public and private games
+            else:
+                dict['allGames'].append((line[1], line[2]))
+    return render_template("index.html", dict=dict)
 
 @app.route('/get_user/<user>')
 def get_user(user):
@@ -51,7 +56,7 @@ def login():
             #we check the new user is not already registered
             for line in conn.cursor().execute(find_users, (username,)):
                     if hashedPwd in line:
-                        session['username'] = "users/"+ request.form['user'] + ".data"
+                        session['username'] = str(request.form['user'])
                         session['shownUser']  = session['username']
                         return redirect('/')
             return render_template('login.html')
@@ -82,7 +87,7 @@ def register():
             hashedPwd = hashlib.sha224(pwd.encode("utf-8")).hexdigest()
             conn.cursor().execute(register_users, (username, hashedPwd))
             conn.commit()
-            session['username'] = "users/"+ request.form['user'] + ".data"
+            session['username'] = str(request.form['user'])
             session['shownUser']  = session['username']
             return redirect('/')
 

@@ -14,25 +14,23 @@
           <li>Personajes</li>
           <li style="float:right"><a class='navLink' href="/logout">Logout</a></li>
       </ul>
-      <div id="myGames">
-        <h1><b>Tus partidas</b></h1>
-        {% if dict['myGames'] == []%}
-        <span>No estas jugando ninguna partida ahora mismo</span>
-        {% endif %}
-        {% for game in dict['myGames'] %}
-          {{game}}
+      <div>
+        {% for user in users%}
+          <a class='pjLink' href={{'/get_user/'+user}} >{{user}}</a>
         {% endfor %}
       </div>
-      <div id="createGames">
-      </div>
-      <div id="allGames">
-        <h1><b>Partidas abiertas</b></h1>
-        {% if dict['allGames'] == []%}
-        <span>No hay partidas abiertas ahora mismo</span>
+      <div>
+        {% if dicc != {} %}
+        <table class=playerData>
+            <tr>
+              <th><text class='statText'>Stat</text></th>
+              <th><text class='statText'>Valor</text></th>
+            </tr>
+            {%for stat in dicc %}
+              <tr><td><text class='statText'>{{stat}}</text></td><td><text class='statText'>{{dicc[stat]}}</text></td></tr>
+            {% endfor %}
+        </table>
         {% endif %}
-        {% for game, description in dict['allGames'] %}
-          <div title="{{description}}">{{game}}</div>
-        {% endfor %}
       </div>
     </body>
 </html>
