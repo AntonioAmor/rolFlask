@@ -70,3 +70,7 @@ table.playerData th {
     background-color: #f00;
     color: white;
 }
+
+span.margin_right{
+    margin-right:15px;
+}
