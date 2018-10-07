@@ -1,25 +1,20 @@
 from flask import Flask, render_template, session, redirect, url_for, request
-from flask_sqlalchemy import SQLAlchemy
-
+import sqlite3
+import hashlib
 import os
+
+
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.secret_key = "Le Password"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128))
+db = 'example.db'
+#conn = sqlite3.connect('example.db')
+#cursor = conn.cursor()
 
-
-    def __repr__(self):
-        return '<User %r>' % self.username
-
-#Conexion a la db
+#TODO: sacar queries a otro fichero
+find_users = "SELECT * FROM users WHERE user_name = ?"
+register_users = "INSERT INTO users (user_name, user_pswd) VALUES (?,?)"
 
 @app.route('/')
 def inServer():
@@ -29,12 +24,6 @@ def inServer():
     usersFiles = [f for f in os.listdir('users/') if os.path.isfile(os.path.join('users/', f))]
     players= [uf.split('.')[0] for uf in usersFiles]
 
-    '''
-    users=[]
-    for uf in userFiles:
-        u,f=uf.split('.')
-    users.append(u)
-    '''
     dicc = {}
     with open(session['shownUser'], 'r') as userFile:
         data = userFile.readlines()[1:]
@@ -56,14 +45,15 @@ def get_user(user):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        try:
-            with open("users/"+request.form['user'] + ".data", 'r') as userFile:
-                pwd = userFile.readline().strip()
-                if pwd == request.form['pass']:
-                    session['username'] = "users/"+ request.form['user'] + ".data"
-                    session['shownUser']  = session['username']
-                    return redirect('/')
-        except FileNotFoundError:
+        with sqlite3.connect(db) as conn:
+            username = request.form['user']
+            hashedPwd = hashlib.sha224(request.form['pass'].encode("utf-8")).hexdigest()
+            #we check the new user is not already registered
+            for line in conn.cursor().execute(find_users, (username,)):
+                    if hashedPwd in line:
+                        session['username'] = "users/"+ request.form['user'] + ".data"
+                        session['shownUser']  = session['username']
+                        return redirect('/')
             return render_template('login.html')
     if 'username' in session:
         return redirect('/')
@@ -80,18 +70,21 @@ def logout():
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['user']
-        pwd = request.form['pass']
-        #we check the new user is not already registered
-        if username not in [uf.split('.')[0] for uf in [f for f in os.listdir('users/') if os.path.isfile(os.path.join('users/', f))]]:
-            with open("users/"+username + ".data", 'w') as userFile:
-                userFile.write(pwd)
-                session['username'] = "users/"+ request.form['user'] + ".data"
-                session['shownUser']  = session['username']
+        with sqlite3.connect(db) as conn:
+            username = request.form['user']
+            pwd = request.form['pass']
+            #we check the new user is not already registered
+            for line in conn.cursor().execute(find_users, (username,)):
+                #If the user exists we cant create it
+                #TODO: add error page
+                return redirect('/')
+            #Else we create the user
+            hashedPwd = hashlib.sha224(pwd.encode("utf-8")).hexdigest()
+            conn.cursor().execute(register_users, (username, hashedPwd))
+            conn.commit()
+            session['username'] = "users/"+ request.form['user'] + ".data"
+            session['shownUser']  = session['username']
             return redirect('/')
-        else: #TODO: mensaje de error
-            return redirect('/')
-
 
 if __name__ == "__main__":
     app.config['TEMPLATES_AUTO_RELOAD'] = True
