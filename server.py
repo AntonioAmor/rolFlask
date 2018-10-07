@@ -114,9 +114,11 @@ def newGame():
             #Create the game
             res=conn.cursor().execute(new_game, (game_name, game_desc))
 
-            print(res)
             #Add user to game
             conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
+            conn.cursor().execute(current_users_plus_one,(game_id))
+
+            return redirect('/')
 
 
 # NOT TESTED
@@ -126,6 +128,7 @@ def joinGame():
         with sqlite3.connect(db) as conn:
             #Add user to game
             conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
+            conn.cursor().execute(current_users_plus_one,(game_id))
 
             return redirect('/')
 
