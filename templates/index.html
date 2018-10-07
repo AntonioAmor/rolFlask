@@ -17,21 +17,38 @@
       <div id="myGames">
         <h1><b>Tus partidas</b></h1>
         {% if dict['myGames'] == []%}
-        <span>No estas jugando ninguna partida ahora mismo</span>
+        <div>No estas jugando ninguna partida ahora mismo.</div>
+
+
+
         {% endif %}
-        {% for game in dict['myGames'] %}
-          {{game}}
+        {% for game, description, max_users, current_users in dict['myGames'] %}
+          <div title="{{description}}">
+            <span class='margin_right'>{{game}}</span>
+            <span class='margin_right'>{{current_users}}/{{max_users}}</span>
+            <span><img src='/static/img/join.svg' width="15" height="15"></span>
+          </div>
         {% endfor %}
       </div>
+
+      <p>
+
       <div id="createGames">
+        <img style="vertical-align:middle" src="/static/img/plus.svg" height="30" width="30">
+        <span> Empieza una partida ahora.</span>
       </div>
-      <div id="allGames">
+
+      <div id="availableGames">
         <h1><b>Partidas abiertas</b></h1>
-        {% if dict['allGames'] == []%}
+        {% if dict['availableGames'] == []%}
         <span>No hay partidas abiertas ahora mismo</span>
         {% endif %}
-        {% for game, description in dict['allGames'] %}
-          <div title="{{description}}">{{game}}</div>
+        {% for game, description, max_users, current_users in dict['availableGames'] %}
+          <div title="{{description}}">
+            <span class='margin_right'>{{game}}</span>
+            <span class='margin_right'>{{current_users}}/{{max_users}}</span>
+            <span><img src='/static/img/join.svg' width="15" height="15"></span>
+          </div>
         {% endfor %}
       </div>
     </body>
