@@ -38,7 +38,6 @@ def inServer():
             myGames.append(line[0])
         #We get all available and public games
         for line in conn.cursor().execute(get_available_games):
-            print(line)
             #if its one of ours we flag it
             if line[0] in myGames: #FIXME: Possible error, we depend on the db schema not changing
                 dict['myGames'].append(line[1:-1])
@@ -62,7 +61,6 @@ def login():
             hashedPwd = hashlib.sha224(request.form['pass'].encode("utf-8")).hexdigest()
             #we check the new user is not already registered
             for line in conn.cursor().execute(find_users, (username,)):
-                print(line)
                 if hashedPwd in line:
                     session['user_id'] = line[0]
                     session['username'] = str(request.form['user'])
