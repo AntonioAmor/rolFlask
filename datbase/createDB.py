@@ -11,7 +11,11 @@ query1 = "CREATE TABLE users (" \
 query2 = "CREATE TABLE game ("\
 	   "game_id integer PRIMARY KEY autoincrement,"\
 	   "game_name varchar(50) NOT NULL,"\
-	   "game_desc text NOT NULL);"
+	   "game_desc text NOT NULL,"\
+	   "max_users integer NOT NULL,"\
+	   "current_users integer NOT NULL,"\
+	   "private integer NOT NULL);"
+
 
 query3 = "CREATE TABLE game_user (" \
     "myuser integer NOT NULL," \
@@ -25,7 +29,6 @@ query3 = "CREATE TABLE game_user (" \
 c.execute(query1)
 c.execute(query2)
 c.execute(query3)
-
 
 conn.commit()
 conn.close()
