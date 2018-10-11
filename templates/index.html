@@ -43,11 +43,19 @@
         {% if dict['availableGames'] == []%}
         <span>No hay partidas abiertas ahora mismo</span>
         {% endif %}
-        {% for game, description, max_users, current_users in dict['availableGames'] %}
+        {% for game_id, game, description, max_users, current_users in dict['availableGames'] %}
           <div title="{{description}}">
             <span class='margin_right'>{{game}}</span>
             <span class='margin_right'>{{current_users}}/{{max_users}}</span>
-            <span><a href="/joinGame"><img src='/static/img/join.svg' width="15" height="15"></a></span>
+            <span>
+              <!--<form>
+                <input type="hidden">{{game_id}}</input>
+                <input type="submit" value='/static/img/join.svg'>
+                  <img src='/static/img/join.svg' width="15" height="15">
+                </input>
+              </form>-->
+              <a href="{{url_for('joinGame', game_id=game_id)}}"><img src='/static/img/join.svg' width="15" height="15"></a>
+            </span>
           </div>
         {% endfor %}
       </div>

@@ -44,7 +44,7 @@ def inServer():
             #if its not we add it to the other list
             #TODO: public and private games
             else:
-                dict['availableGames'].append(line[1:-1])
+                dict['availableGames'].append(line[:-1])
     return render_template("index.html", dict=dict)
 
 @app.route('/get_user/<user>')
@@ -113,21 +113,23 @@ def newGame():
             res=conn.cursor().execute(new_game, (game_name, game_desc))
 
             #Add user to game
-            conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
-            conn.cursor().execute(current_users_plus_one,(game_id))
+            conn.cursor().execute(add_user_to_game,(session['user_id'],request.form[game_id]))
+            conn.cursor().execute(current_users_plus_one,(request.form[game_id]))
 
             return redirect('/')
 
 
 # NOT TESTED
-@app.route('/joinGame', methods=['POST'])
-def joinGame():
-    if request.method == 'POST':
+@app.route('/joinGame/<game_id>', methods=['GET'])
+def joinGame(game_id):
+    if request.method == 'GET':
         with sqlite3.connect(db) as conn:
             #Add user to game
+            #cosenguir game_id
+
             conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
             conn.cursor().execute(current_users_plus_one,(game_id))
-
+            print("Hola")
             return redirect('/')
 
 
