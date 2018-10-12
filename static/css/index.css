@@ -74,3 +74,23 @@ table.playerData th {
 span.margin_right{
     margin-right:15px;
 }
+
+
+div.width60per{
+  width: 60%;
+}
+
+div.width40per{
+  width: 40%;
+}
+
+div.right{
+    float: right;
+}
+div.left{
+    float: left;
+}
+
+div.nodisplay{
+    display: none;
+}
