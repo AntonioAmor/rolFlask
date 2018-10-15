@@ -76,21 +76,23 @@ span.margin_right{
 }
 
 
-div.width60per{
-  width: 60%;
-}
-
-div.width40per{
-  width: 40%;
-}
-
-div.right{
+div.rightIndexDiv{
+    width: 60%;
     float: right;
 }
-div.left{
+div.leftIndexDiv{
+    width: 40%;
     float: left;
 }
 
 div.nodisplay{
     display: none;
+}
+#joinDiv {
+    display: none;
+}
+
+.joinButton{
+  width: 15px;
+  height: 15px;
 }
