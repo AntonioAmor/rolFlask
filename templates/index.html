@@ -6,7 +6,6 @@
         <meta http-equiv="Cache-Control" content="no-store" />
         <title>Rol Server</title>
         <link rel="stylesheet" href="{{ url_for('static',filename='css/index.css') }}">
-        <script src="{{ url_for('static',filename='js/main.js') }}"></script>
     </head>
     <body>
       <ul>
@@ -16,7 +15,7 @@
           <li style="float:right"><a class='navLink' href="/logout">Logout</a></li>
       </ul>
 
-      <div class='width40per left'>
+      <div class='leftIndexDiv'>
 
         <div id="myGames">
           <h1><b>Tus partidas</b></h1>
@@ -52,13 +51,7 @@
               <span class='margin_right'>{{game}}</span>
               <span class='margin_right'>{{current_users}}/{{max_users}}</span>
               <span>
-                <!--<form>
-                  <input type="hidden">{{game_id}}</input>
-                  <input type="submit" value='/static/img/join.svg'>
-                    <img src='/static/img/join.svg' width="15" height="15">
-                  </input>
-                </form>-->
-                <a href="{{url_for('joinGame', game_id=game_id)}}"><img src='/static/img/join.svg' width="15" height="15"></a>
+                <img class='joinButton' src='/static/img/join.svg' value="{{game_id}}">
               </span>
             </div>
           {% endfor %}
@@ -66,9 +59,17 @@
       </div> <!-- left-->
 
       <!--  descomentar para hacer invisible y quitar el div de abajo <div class='width60per right nodisplay'>-->
-      <div class='width60per right '>
+      <div id='joinDiv' class='rightIndexDiv '>
         <img img src='/static/img/join.svg' width="50" height="50" />
-        aqui esta el div oculto para la creacion de pjs and shit
+        <form method="post" action="/">
+          <label>Request message:</label>
+          <input type='text'/>
+          <input type="hidden" id="joinId" />
+          <input type="submit" value="Join" />
+        </form>
+
       </div>
+    <script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/index.js') }}"></script>
     </body>
 </html>
