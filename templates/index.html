@@ -29,7 +29,7 @@
             <div title="{{description}}">
               <span class='margin_right'>{{game}}</span>
               <span class='margin_right'>{{current_users}}/{{max_users}}</span>
-              <span><img src='/static/img/join.svg' width="15" height="15"></span>
+              <span><img class='joinButton' src='/static/img/join.svg'></span>
             </div>
           {% endfor %}
         </div>
@@ -58,17 +58,34 @@
         </div>
       </div> <!-- left-->
 
-      <!--  descomentar para hacer invisible y quitar el div de abajo <div class='width60per right nodisplay'>-->
       <div id='joinDiv' class='rightIndexDiv '>
-        <img img src='/static/img/join.svg' width="50" height="50" />
+          Description:
+        <div id='joinDesc'><!-- Aqui va la description de la partida--></div>
+          Request message:
         <form method="post" action="/">
-          <label>Request message:</label>
           <input type='text'/>
           <input type="hidden" id="joinId" />
           <input type="submit" value="Join" />
         </form>
 
       </div>
+
+      <div id='createDiv' class='rightIndexDiv '>
+        <form method="post" action="/">
+          <label>Name:</label>
+          <input type='text'/> <br />
+          <label>Description:</label>
+          <input type='text'/> <br />
+          <label>Maximun users:</label>
+          <input type='number'/> <br />
+          <label>Private:</label>
+          <input type='checkbox'/> <br />
+
+          <input type="submit" value="Create" />
+        </form>
+
+      </div>
+
     <script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ url_for('static',filename='js/index.js') }}"></script>
     </body>
