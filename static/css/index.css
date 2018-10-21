@@ -85,10 +85,11 @@ div.leftIndexDiv{
     float: left;
 }
 
-div.nodisplay{
+#joinDiv {
     display: none;
 }
-#joinDiv {
+
+#createDiv {
     display: none;
 }
 
