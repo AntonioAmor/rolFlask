@@ -2,14 +2,15 @@ $(document).ready(function() {
         $(".joinButton").click(function() {
 
             var game_id = $(this).attr("value");
-            if (game_id == $("#joinId").attr("placeholder")){
+            var val = $("#joinId").attr("value")
+            if ( val == game_id || val ==null){
               $("#joinDiv").toggle();
             }else{
               $("joinDiv").show();
             }
 
             var desc= $(this).closest("div").attr("title");
-            $("#joinId").attr("placeholder", game_id);
+            $("#joinId").attr("value", game_id);
             $("#joinDesc").text(desc)
         });
     });
