@@ -13,7 +13,7 @@ query2 = "CREATE TABLE game ("\
 	   "game_name varchar(50) NOT NULL,"\
 	   "game_desc text NOT NULL,"\
 	   "max_users integer NOT NULL,"\
-	   "current_users integer NOT NULL,"\
+	   "current_users integer NOT NULL DEFAULT 0,"\
 	   "private integer NOT NULL);"
 
 
