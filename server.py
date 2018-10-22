@@ -17,9 +17,10 @@ find_users = "SELECT * FROM users WHERE user_name = ?"
 get_id = "SELECT user_id FROM users WHERE user_name = ?"
 register_users = "INSERT INTO users (user_name, user_pswd) VALUES (?,?)"
 get_available_games = "SELECT * FROM game WHERE current_users < max_users AND private = 0"
-get_user_games = "SELECT game from game_user WHERE myuser = ?"
 
-new_game = "INSERT INTO game (game_name, game_desc) VALUES (?,?)"
+get_user_games = "SELECT * FROM game WHERE game_id IN (SELECT game from game_user WHERE myuser = ?)"
+
+new_game = "INSERT INTO game (game_name, game_desc, max_users, private) VALUES (?,?,?,?)"
 
 add_user_to_game = "INSERT INTO game_user (myuser, game) VALUES (?,?)"
 
@@ -32,22 +33,15 @@ def inServer():
     if 'username' not in session:
         return redirect(url_for("login"))
     dict = { "myGames" : [], "availableGames" : [], "game_desc": []}
-    myGames = []
     with sqlite3.connect(db) as conn:
-        id = conn.cursor().execute(get_id, (session['username'],)).fetchone()[0]
         #We get the games the user is in
-        for line in conn.cursor().execute(get_user_games, (id,)):
-            myGames.append(line[0])
+        for line in conn.cursor().execute(get_user_games, (session['user_id'],)):
+            dict['myGames'].append(line[1:-1])
         #We get all available and public games
         for line in conn.cursor().execute(get_available_games):
-            #if its one of ours we flag it
-            if line[0] in myGames: #FIXME: Possible error, we depend on the db schema not changing
-                dict['myGames'].append(line[1:-1])
-            #if its not we add it to the other list
-            #TODO: public and private games
-            else:
-                dict['availableGames'].append(line[:-1])
+            dict['availableGames'].append(line[:-1])
     return render_template("index.html", dict=dict)
+
 
 @app.route('/get_user/<user>')
 def get_user(user):
@@ -109,30 +103,36 @@ def newGame():
     if request.method == 'POST':
         with sqlite3.connect(db) as conn:
             game_name= request.form['game_name']
-            game_desc= reques.form['game_desc']
+            game_desc= request.form['game_desc']
+            max_users=request.form['max_users']
+            priv=request.form['private']
 
             #Create the game
-            res=conn.cursor().execute(new_game, (game_name, game_desc))
+            res=conn.cursor().execute(new_game, (game_name, game_desc, max_users, priv))
 
-            #Add user to game
-            conn.cursor().execute(add_user_to_game,(session['user_id'],request.form[game_id]))
-            conn.cursor().execute(current_users_plus_one,(request.form[game_id]))
-            #Add user as GM
-            conn.cursor().execute(add_gm_to_gamer,(session['user_id'], request.form[game_id]))
+            find_game="SELECT game_id FROM game WHERE game_name= ? AND game_desc = ? AND current_users = 0"
+            res=conn.cursor().execute(find_game, (game_name, game_desc))
+
+            for line in res:
+                game_id=line[0]
+
+                #Add user to game
+                conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
+                conn.cursor().execute(current_users_plus_one,(game_id,))
+                #Add user as GM
+                conn.cursor().execute(add_gm_to_gamer,(session['user_id'], game_id))
 
             return redirect('/')
 
 
-# NOT TESTED
 @app.route('/joinGame', methods=['POST'])
 def joinGame():
     if request.method == 'POST':
         with sqlite3.connect(db) as conn:
             game_id=request.form['game_id']
-            # ERROR : game_id not working
             #Add user to game
             conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
-            conn.cursor().execute(current_users_plus_one,game_id)
+            conn.cursor().execute(current_users_plus_one,(game_id,))
 
             return redirect('/')
 
