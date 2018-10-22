@@ -23,6 +23,8 @@ new_game = "INSERT INTO game (game_name, game_desc) VALUES (?,?)"
 
 add_user_to_game = "INSERT INTO game_user (myuser, game) VALUES (?,?)"
 
+add_gm_to_gamer = "INSERT INTO game_gm (master, game) VALUES (?,?)"
+
 current_users_plus_one = "UPDATE game SET current_users = current_users + 1 WHERE game_id = ?"
 
 @app.route('/')
@@ -115,21 +117,23 @@ def newGame():
             #Add user to game
             conn.cursor().execute(add_user_to_game,(session['user_id'],request.form[game_id]))
             conn.cursor().execute(current_users_plus_one,(request.form[game_id]))
+            #Add user as GM
+            conn.cursor().execute(add_gm_to_gamer,(session['user_id'], request.form[game_id]))
 
             return redirect('/')
 
 
 # NOT TESTED
-@app.route('/joinGame/<game_id>', methods=['GET'])
-def joinGame(game_id):
-    if request.method == 'GET':
+@app.route('/joinGame', methods=['POST'])
+def joinGame():
+    if request.method == 'POST':
         with sqlite3.connect(db) as conn:
+            game_id=request.form['game_id']
+            # ERROR : game_id not working
             #Add user to game
-            #cosenguir game_id
-
             conn.cursor().execute(add_user_to_game,(session['user_id'],game_id))
-            conn.cursor().execute(current_users_plus_one,(game_id))
-            print("Hola")
+            conn.cursor().execute(current_users_plus_one,game_id)
+
             return redirect('/')
 
 
