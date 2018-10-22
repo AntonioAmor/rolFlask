@@ -26,9 +26,20 @@ query3 = "CREATE TABLE game_user (" \
         "ON UPDATE CASCADE ON DELETE NO ACTION," \
     "CONSTRAINT game_users_pkey PRIMARY KEY (game, myuser));"
 
+query4= "CREATE TABLE game_gm ("\
+	"master integer NOT NULL,"\
+	"game integer NOT NULL,"\
+	"FOREIGN KEY (master) REFERENCES users (user_id)"\
+	"	ON UPDATE CASCADE ON DELETE NO ACTION,"\
+	"FOREIGN KEY (game) REFERENCES game (game_id)"\
+	"	ON UPDATE CASCADE ON DELETE NO ACTION,"\
+	"CONSTRAINT game_gm_pkey PRIMARY KEY (game, master));"
+
+
 c.execute(query1)
 c.execute(query2)
 c.execute(query3)
+c.execute(query4)
 
 conn.commit()
 conn.close()
