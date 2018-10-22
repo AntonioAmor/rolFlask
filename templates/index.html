@@ -58,7 +58,7 @@
         </div>
       </div> <!-- left-->
 
-      <div id='joinDiv' class='rightIndexDiv '>
+      <div id='joinDiv' class='rightIndexDiv'>
           Description:
         <div id='joinDesc'><!-- Aqui va la description de la partida--></div>
           Request message:
@@ -70,16 +70,16 @@
 
       </div>
 
-      <div id='createDiv' class='rightIndexDiv '>
-        <form method="post" action="/">
+      <div id='createDiv' class='rightIndexDiv'>
+        <form method="post" action="/newGame">
           <label>Name:</label>
-          <input type='text'/> <br />
+          <input type='text' name='game_name'/> <br />
           <label>Description:</label>
-          <input type='text'/> <br />
+          <input type='text' name='game_desc'/> <br />
           <label>Maximun users:</label>
-          <input type='number'/> <br />
+          <input type='number' name='max_users'/> <br />
           <label>Private:</label>
-          <input type='checkbox'/> <br />
+          <input type='checkbox' name='private'/> <br />
 
           <input type="submit" value="Create" />
         </form>
