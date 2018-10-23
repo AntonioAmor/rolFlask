@@ -16,7 +16,9 @@ db = 'example.db'
 find_users = "SELECT * FROM users WHERE user_name = ?"
 get_id = "SELECT user_id FROM users WHERE user_name = ?"
 register_users = "INSERT INTO users (user_name, user_pswd) VALUES (?,?)"
-get_available_games = "SELECT * FROM game WHERE current_users < max_users AND private = 0"
+
+get_available_games = "SELECT * FROM game WHERE current_users < max_users AND private = 0 AND game_id NOT IN (SELECT game FROM game_user WHERE myuser = ?)"
+
 
 get_user_games = "SELECT * FROM game WHERE game_id IN (SELECT game from game_user WHERE myuser = ?)"
 
@@ -38,7 +40,7 @@ def inServer():
         for line in conn.cursor().execute(get_user_games, (session['user_id'],)):
             dict['myGames'].append(line[1:-1])
         #We get all available and public games
-        for line in conn.cursor().execute(get_available_games):
+        for line in conn.cursor().execute(get_available_games,(session['user_id'],)):
             dict['availableGames'].append(line[:-1])
     return render_template("index.html", dict=dict)
 
