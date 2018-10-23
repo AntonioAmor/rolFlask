@@ -29,7 +29,7 @@
             <div title="{{description}}">
               <span class='margin_right'>{{game}}</span>
               <span class='margin_right'>{{current_users}}/{{max_users}}</span>
-              <span><img class='joinButton' src='/static/img/join.svg'></span>
+              <span><img class='toGameButton' src='/static/img/join.svg'></span>
             </div>
           {% endfor %}
         </div>
@@ -79,7 +79,7 @@
           <label>Maximun users:</label>
           <input type='number' name='max_users'/> <br />
           <label>Private:</label>
-          <input type='checkbox' name='private'/> <br />
+          <input type='number' name='private'/> <br />
 
           <input type="submit" value="Create" />
         </form>
