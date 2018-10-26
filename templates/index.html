@@ -21,9 +21,6 @@
           <h1><b>Tus partidas</b></h1>
           {% if dict['myGames'] == []%}
           <div>No estas jugando ninguna partida ahora mismo.</div>
-
-
-
           {% endif %}
           {% for game, description, max_users, current_users in dict['myGames'] %}
             <div title="{{description}}">
