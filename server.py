@@ -30,6 +30,9 @@ add_gm_to_gamer = "INSERT INTO game_gm (master, game) VALUES (?,?)"
 
 current_users_plus_one = "UPDATE game SET current_users = current_users + 1 WHERE game_id = ?"
 
+get_all_players_in_game = "SELECT player from player_games NATURAL JOIN user_player WHERE game = ?"
+get_players_in_game = "SELECT player from player_games NATURAL JOIN user_player WHERE  game = ? AND myuser = ?"
+
 @app.route('/')
 def inServer():
     if 'username' not in session:
@@ -137,6 +140,16 @@ def joinGame():
             conn.cursor().execute(current_users_plus_one,(game_id,))
 
             return redirect('/')
+
+@app.route('/game', methods=['POST'])
+def game():
+    if request.method=='POST':
+        with sqlite3.connect(db) as conn:
+
+            ans= conn.cursor().execute(get_all_players_in_game,(game_id,))
+            for l in ans:
+                pass
+
 
 
 if __name__ == "__main__":
