@@ -74,7 +74,7 @@ c.execute(query3)
 c.execute(query4)
 c.execute(query5)
 c.execute(query6)
-c.execute(query7)
+#c.execute(query7)
 
 conn.commit()
 conn.close()
