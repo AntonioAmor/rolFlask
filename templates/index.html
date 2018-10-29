@@ -26,7 +26,11 @@
             <div title="{{description}}">
               <span class='margin_right'>{{game}}</span>
               <span class='margin_right'>{{current_users}}/{{max_users}}</span>
-              <span><img class='toGameButton' src='/static/img/join.svg'></span>
+              <span>
+                <a href="{{ url_for('game.html') }}">
+                  <img class='toGameButton' src='/static/img/join.svg'>
+                </a>
+              </span>
             </div>
           {% endfor %}
         </div>
